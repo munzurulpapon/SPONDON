@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="report_screen_title">Report a City Problem</string>
+    <string name="report_screen_subtitle">Help make your city safer and better.</string>
+    <string name="issue_category">Select Issue Category</string>
+    <string name="problem_title">Problem Title</string>
+    <string name="issue_title_hint">Example: Large pothole on the road</string>
+    <string name="problem_description">Problem Description</string>
+    <string name="issue_description_hint">Describe the problem in detail...</string>
+    <string name="issue_location">Problem Location</string>
+    <string name="issue_location_hint">Enter area, road or landmark</string>
+    <string name="submit_report">Submit Report</string>
+
+
+    <string name="app_name">SPONDON</string>
+    <string name="citizen_dashboard">Citizen Dashboard</string>
+    <string name="logout">Logout</string>
+
+    <string name="welcome_city">Welcome to Your City!</string>
+    <string name="city_tagline">Everything your city needs, in one place.</string>
+    <string name="our_services">Our Services</string>
+
+    <string name="city_map">City Map</string>
+    <string name="report_problem">Report a City Problem</string>
+    <string name="public_transport">Public Transport</string>
+    <string name="healthcare">Healthcare</string>
+    <string name="utility_services">Utility Services</string>
+    <string name="home_services">Home Services</string>
+    <string name="blood_donation">Blood Donation</string>
+    <string name="emergency_sos">Emergency SOS</string>
+    <string name="my_reports">My Reports</string>
+    <string name="community">Community</string>
+
+</resources>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7FC"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#142B52"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/citizen_dashboard"
+            android:textColor="#142B52"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/logout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#DCEBFF"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_city"
+                android:textColor="#142B52"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/city_tagline"
+                android:textColor="#344B6B"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/our_services"
+            android:textColor="#142B52"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCityMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/city_map" />
+
+        <Button
+            android:id="@+id/btnReportIssue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_problem" />
+
+        <Button
+            android:id="@+id/btnPublicProjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Public Projects" />
+
+        <Button
+            android:id="@+id/btnTransport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/public_transport" />
+
+        <Button
+            android:id="@+id/btnHealthcare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/healthcare" />
+
+        <Button
+            android:id="@+id/btnUtility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/utility_services" />
+
+        <Button
+            android:id="@+id/btnHomeServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/home_services" />
+
+        <Button
+            android:id="@+id/btnBloodDonation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/blood_donation" />
+
+        <Button
+            android:id="@+id/btnEmergency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/emergency_sos" />
+
+        <Button
+            android:id="@+id/btnMyEmergencyRequests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Emergency Requests" />
+
+        <Button
+            android:id="@+id/btnMyReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/my_reports" />
+
+        <Button
+            android:id="@+id/btnCommunity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/community" />
+
+    </LinearLayout>
+
+</ScrollView>

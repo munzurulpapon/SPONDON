@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etMapSearch"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Search places or locations..."
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:drawable/edit_text"/>
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:text="Search"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+    <!-- Saved and Recent Places -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp">
+
+            <Button
+                android:id="@+id/btnSavePlace"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:text="Save Place"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnSavedPlaces"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Saved"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnRecentSearches"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Recent"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Dark Map"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!-- Nearby Place Filters -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <Button
+                android:id="@+id/btnAll"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:text="All"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnHospital"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Hospital"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnPolice"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Police"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnFire"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Fire"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnATM"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="ATM"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnPharmacy"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Pharmacy"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnRestaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Restaurant"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnUniversity"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="University"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnBusStop"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Bus Stop"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnFuel"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Fuel"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnHotel"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="5dp"
+                android:text="Hotel"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!-- Map Area -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/osmMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tvCompass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="12dp"
+            android:padding="10dp"
+            android:background="#EFFFFFFF"
+            android:text="Compass: --"
+            android:textColor="#212121"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/btnMyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:text="My Location"
+            android:textAllCaps="false"
+            android:elevation="6dp"/>
+
+    </FrameLayout>
+
+    <!-- Route Information Panel -->
+    <LinearLayout
+        android:id="@+id/layoutRouteInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="#F1F5F9"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Route Information"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <TextView
+            android:id="@+id/tvRouteDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Distance: --"
+            android:textSize="14sp"
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/tvRouteDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Estimated time: --"
+            android:textSize="14sp"
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/tvRemainingDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Remaining distance: --"
+            android:textSize="14sp"
+            android:textColor="#1976D2"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvRemainingTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Remaining time: --"
+            android:textSize="14sp"
+            android:textColor="#1976D2"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvNextInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Next: --"
+            android:textSize="14sp"
+            android:textColor="#333333"/>
+
+        <Button
+            android:id="@+id/btnDirections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="View Directions"
+            android:textAllCaps="false"
+            android:enabled="false"/>
+
+        <Button
+            android:id="@+id/btnClearRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Clear Route"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</LinearLayout>

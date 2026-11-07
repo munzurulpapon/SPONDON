@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7FC">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EMERGENCY REQUEST"
+            android:textColor="#C62828"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Submit an emergency request for assistance."
+            android:textColor="#607087"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etEmergencyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="Your Full Name"
+            android:inputType="textCapWords"
+            android:padding="14dp"
+            android:background="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/etEmergencyPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:padding="14dp"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Emergency Type"
+            android:textColor="#142B52"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spEmergencyType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/etEmergencyLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Emergency Location / Address"
+            android:inputType="textCapSentences"
+            android:padding="14dp"
+            android:background="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/etEmergencyDescription"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginTop="15dp"
+            android:hint="Describe the Emergency"
+            android:gravity="top"
+            android:inputType="textMultiLine|textCapSentences"
+            android:padding="14dp"
+            android:background="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnSubmitEmergency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="SUBMIT EMERGENCY REQUEST"
+            android:backgroundTint="#C62828"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnBackEmergency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Back" />
+
+    </LinearLayout>
+
+</ScrollView>

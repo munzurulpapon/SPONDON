@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="SPONDON"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SPONDON">
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".PublicProjectsActivity" />
+        <activity android:name=".ProjectUpdatesActivity" />
+        <activity android:name=".ManageProjectUpdatesActivity" />
+
+        <activity
+            android:name=".CityMapActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MyEmergencyRequestsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ManageEmergenciesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EmergencyAdminDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EmergencyRequestActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ManageServicesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReportAdminDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ManageReportsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ManageUsersActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReportDetailsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MyReportsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F7FA">
+
+    <TextView
+        android:id="@+id/tvReportsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Citizen Reports"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#172554"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/tvReportCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Reports: 0"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#334155"
+        android:padding="8dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvNoReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No citizen reports found."
+        android:textSize="16sp"
+        android:textColor="#64748B"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone"/>
+
+    <ListView
+        android:id="@+id/lvReports"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#CBD5E1"
+        android:dividerHeight="1dp"/>
+
+    <Button
+        android:id="@+id/btnBackReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Admin Dashboard"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>

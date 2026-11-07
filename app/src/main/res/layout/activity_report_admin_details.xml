@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Citizen Report Details"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#172554"
+            android:paddingBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report Title"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:textColor="#1E293B"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textSize="16sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailUid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Citizen UID"
+            android:textSize="13sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailCurrentStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Status"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#166534"
+            android:padding="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Report Status"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:paddingBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spReportStatus"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#FFFFFF"/>
+
+        <EditText
+            android:id="@+id/etAdminNote"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Admin Note (optional)"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:layout_marginTop="15dp"
+            android:background="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/btnUpdateStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Report Status"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/btnBackDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

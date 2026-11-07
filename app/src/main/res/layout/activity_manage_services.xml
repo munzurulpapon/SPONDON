@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F4F7FC"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MANAGE CITY SERVICES"
+        android:textColor="#142B52"
+        android:textSize="23sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvServiceCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Total Services: 0"
+        android:textColor="#607087"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/etServiceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Service Name"
+        android:inputType="textCapSentences"
+        android:padding="14dp"
+        android:background="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/etServiceCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Service Category"
+        android:inputType="textCapSentences"
+        android:padding="14dp"
+        android:background="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/etServiceDescription"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="12dp"
+        android:hint="Service Description"
+        android:gravity="top"
+        android:inputType="textMultiLine|textCapSentences"
+        android:padding="14dp"
+        android:background="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnAddService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Add Service" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="Available Services"
+        android:textColor="#142B52"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/lvServices"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:divider="#DCE3ED"
+        android:dividerHeight="1dp" />
+
+    <Button
+        android:id="@+id/btnBackServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Back to Dashboard" />
+
+</LinearLayout>
