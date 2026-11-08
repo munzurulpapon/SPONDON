@@ -1,4 +1,3 @@
-
 package com.example.spondon;
 
 import android.Manifest;
@@ -122,6 +121,7 @@ public class CityMapActivity extends AppCompatActivity
     private float[] magneticValues;
     private float currentAzimuth = 0;
 
+    private boolean pendingIncomingRoute = false;
     private String activeFilter = "All";
 
     // Smart Issue Filters
@@ -159,6 +159,17 @@ public class CityMapActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try {
+            Configuration.getInstance().load(
+                    getApplicationContext(),
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+            // Keep map tiles in app-private storage (no storage permission needed on Android 10+)
+            java.io.File base = new java.io.File(getCacheDir(), "osmdroid");
+            java.io.File tiles = new java.io.File(base, "tiles");
+            tiles.mkdirs();
+            Configuration.getInstance().setOsmdroidBasePath(base);
+            Configuration.getInstance().setOsmdroidTileCache(tiles);
+        } catch (Exception ignored) { }
         Configuration.getInstance().setUserAgentValue(
                 "SPONDON/1.0 (Android; com.example.spondon)"
         );
@@ -179,9 +190,31 @@ public class CityMapActivity extends AppCompatActivity
         loadCitizenIssueMarkers();
 
         checkLocationPermission();
+        applyIncomingDestination();
+    }
+
+    /** Opens the map on a destination passed by another screen (e.g. a disaster shelter). */
+    private void applyIncomingDestination() {
+        try {
+            android.content.Intent in = getIntent();
+            if (in == null || !in.hasExtra("DEST_LAT") || !in.hasExtra("DEST_LON")) return;
+            double lat = in.getDoubleExtra("DEST_LAT", 0);
+            double lon = in.getDoubleExtra("DEST_LON", 0);
+            String name = in.getStringExtra("DEST_NAME");
+            if (lat == 0 && lon == 0) return;
+            pendingIncomingRoute = !hasCurrentLocation;
+            selectDestination(name != null ? name : "Destination", "", lat, lon);
+        } catch (Exception e) {
+            Log.w(TAG, "Could not apply incoming destination", e);
+        }
     }
 
     private void initializeViews() {
+
+        View btnBack = findViewById(R.id.btnBackMap);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         mapView = findViewById(R.id.osmMap);
 
@@ -1256,6 +1289,13 @@ public class CityMapActivity extends AppCompatActivity
         if (!nearbyLoaded) {
             nearbyLoaded = true;
             loadNearbyPlaces(currentLatitude, currentLongitude);
+        }
+
+        // A destination handed in by another screen (e.g. a shelter) had no GPS fix yet: route now.
+        if (pendingIncomingRoute && !destinationName.isEmpty()) {
+            pendingIncomingRoute = false;
+            loadRoute(currentLatitude, currentLongitude,
+                    destinationLatitude, destinationLongitude, false);
         }
     }
 

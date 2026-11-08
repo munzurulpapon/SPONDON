@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +17,20 @@
         android:theme="@style/Theme.SPONDON">
 
         <service
+            android:name=".CivicMonitoringService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".SystemAlertReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+            </intent-filter>
+        </receiver>
+
+        <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
@@ -22,9 +38,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".PublicProjectsActivity" />
-        <activity android:name=".ProjectUpdatesActivity" />
-        <activity android:name=".ManageProjectUpdatesActivity" />
+        <!-- Core Existing Modules -->
+        <activity android:name=".PublicProjectsActivity" android:exported="false" />
+        <activity android:name=".ProjectUpdatesActivity" android:exported="false" />
+        <activity android:name=".ManageProjectUpdatesActivity" android:exported="false" />
 
         <activity
             android:name=".CityMapActivity"
@@ -92,6 +109,102 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Phase 1 Module A: Smart City Services -->
+        <activity
+            android:name=".ServicesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BookServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyServiceRequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderRequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminServiceRequestsActivity"
+            android:exported="false" />
+
+        <!-- Phase 1 Module B: Healthcare & Public Facilities -->
+        <activity
+            android:name=".HealthcareActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BloodDonationActivity"
+            android:exported="false" />
+
+        <!-- Phase 1 Module C: Smart Tourism & Landmarks -->
+        <activity
+            android:name=".TourismActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TourismDetailsActivity"
+            android:exported="false" />
+
+        <!-- Phase 1 Module D: Jobs & Opportunities -->
+        <activity
+            android:name=".JobsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JobDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ApplyJobActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyJobApplicationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageJobsActivity"
+            android:exported="false" />
+
+        <!-- Phase 1 Module E: Vehicle & Road Services -->
+        <activity
+            android:name=".VehicleRoadActivity"
+            android:exported="false" />
+
+        <!-- Smart Transportation -->
+        <activity
+            android:name=".TransportationActivity"
+            android:exported="false" />
+
+        <!-- Disaster Management & Safety -->
+        <activity
+            android:name=".DisasterManagementActivity"
+            android:exported="false" />
+
+        <!-- Public Utilities & Civic Services -->
+        <activity
+            android:name=".PublicUtilitiesActivity"
+            android:exported="false" />
+
+        <!-- Citizen Community, Environment, Rewards, Communication & Notifications -->
+        <activity
+            android:name=".CommunityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EnvironmentalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RewardsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommunicationCenterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationCenterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CityIntelligenceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
             android:exported="false" />
 
         <activity

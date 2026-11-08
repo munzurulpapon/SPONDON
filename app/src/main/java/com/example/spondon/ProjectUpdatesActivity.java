@@ -109,12 +109,13 @@ public class ProjectUpdatesActivity extends AppCompatActivity {
                     layoutProjectUpdates.removeAllViews();
 
                     if (value == null || value.isEmpty()) {
-
-                        tvNoUpdates.setText(
-                                "No project updates available yet."
-                        );
-
-                        tvNoUpdates.setVisibility(View.VISIBLE);
+                        addUpdateCard("Phase 1 Structural Milestone [DEMO]", 
+                            "Paving, concrete embankment reinforcement and base structural elements completed and inspected by municipal engineers.",
+                            "Ongoing", "2 days ago");
+                        addUpdateCard("Environmental Impact Assessment Clearance [DEMO]", 
+                            "KCC Department of Environment verified eco-clearance for solar lighting and green buffer tree saplings.",
+                            "Completed", "1 week ago");
+                        tvNoUpdates.setVisibility(View.GONE);
                         return;
                     }
 

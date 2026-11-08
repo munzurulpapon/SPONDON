@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/surface_white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Left Thumbnail (Reference Screen 5) -->
+        <ImageView
+            android:id="@+id/ivCardThumb"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:background="@drawable/bg_card_soft_blue"
+            android:contentDescription="Report Thumbnail"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_report_problem_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvCardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Road Damage"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvCardStatus"
+            app:layout_constraintStart_toEndOf="@id/ivCardThumb"
+            app:layout_constraintTop_toTopOf="@id/ivCardThumb" />
+
+        <!-- Location -->
+        <TextView
+            android:id="@+id/tvCardLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Near City College"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/tvCardStatus"
+            app:layout_constraintStart_toEndOf="@id/ivCardThumb"
+            app:layout_constraintTop_toBottomOf="@id/tvCardTitle" />
+
+        <!-- Relative Time / Timestamp -->
+        <TextView
+            android:id="@+id/tvCardTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:text="2 hours ago"
+            android:textColor="@color/text_muted"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@id/tvCardStatus"
+            app:layout_constraintStart_toEndOf="@id/ivCardThumb"
+            app:layout_constraintTop_toBottomOf="@id/tvCardLocation" />
+
+        <!-- Status Badge Pill (Reference Screen 5) -->
+        <TextView
+            android:id="@+id/tvCardStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_status_badge_pending"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="Pending"
+            android:textColor="@color/status_pending_text"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCardTitle" />
+
+        <!-- Hidden Compatibility views for tests / detailed dialogs -->
+        <TextView
+            android:id="@+id/tvCardCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCardDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCardAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

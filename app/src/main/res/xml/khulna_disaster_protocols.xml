@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<disaster_protocols>
+    <protocol>
+        <title>Khulna Coastal Early Warning &amp; Siren Protocol</title>
+        <category>Cyclone</category>
+        <location>Khulna Coastal Belt (Koyra, Dacope, Paikgachha)</location>
+        <capacity>Broadcast Radius: 15 km Coastal Coverage</capacity>
+        <details>Red Crescent Cyclone Preparedness Programme (CPP) volunteers deploy megaphone alerts and hoist signal flags 4 to 10 upon BMD bulletins. Move elderly and children to shelters early.</details>
+        <phone>1090</phone>
+        <isShelter>false</isShelter>
+        <lat>22.8456</lat>
+        <lon>89.5403</lon>
+    </protocol>
+
+    <protocol>
+        <title>River Bhairab &amp; Rupsha Tidal Surge Flood Safety Protocol</title>
+        <category>Flood</category>
+        <location>Rupsha Ferry Ghat, Khalishpur &amp; Daulatpur</location>
+        <capacity>Canal Sluice Gate Control: 12 Active Stations</capacity>
+        <details>During full-moon spring tides or upstream tidal surges, stay clear of low-lying embankments. Boil drinking water or use water purification tablets provided by WASA.</details>
+        <phone>16163</phone>
+        <isShelter>false</isShelter>
+        <lat>22.8200</lat>
+        <lon>89.5700</lon>
+    </protocol>
+
+    <protocol>
+        <title>Urban Fire Outbreak &amp; Chemical Storage Protocol</title>
+        <category>Fire</category>
+        <location>Bara Bazar &amp; Sheikhpara Commercial Hubs</location>
+        <capacity>Direct Hydrant Stations: 6 Strategic Points</capacity>
+        <details>Immediately evacuate narrow alleys; do not use elevators. Fire Service Control room coordinates foam units for warehouse zones. Keep municipal hydrants unobstructed.</details>
+        <phone>041-760333</phone>
+        <isShelter>false</isShelter>
+        <lat>22.8180</lat>
+        <lon>89.5600</lon>
+    </protocol>
+
+    <protocol>
+        <title>Bengal Basin Tectonic Shock &amp; Structural Safety Protocol</title>
+        <category>Earthquake</category>
+        <location>All Khulna City Corporation (KCC) Wards</location>
+        <capacity>Emergency Assembly Zones: Hadis Park &amp; Circuit House Maidan</capacity>
+        <details>Drop, Cover, and Hold On under heavy furniture. Stay clear of glass windows and overhead power lines. Assemble at designated open grounds after ground shaking ceases.</details>
+        <phone>999</phone>
+        <isShelter>false</isShelter>
+        <lat>22.8150</lat>
+        <lon>89.5640</lon>
+    </protocol>
+</disaster_protocols>

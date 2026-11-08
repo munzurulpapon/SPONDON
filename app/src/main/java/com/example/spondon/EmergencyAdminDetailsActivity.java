@@ -1,4 +1,3 @@
-
 package com.example.spondon;
 
 import android.os.Bundle;
@@ -172,6 +171,9 @@ public class EmergencyAdminDetailsActivity extends AppCompatActivity {
                 .document(emergencyId)
                 .update(updates)
                 .addOnSuccessListener(unused -> {
+
+                    // Realtime Database: push live status to the citizen
+                    RealtimeDbHelper.updateEmergencyStatus(emergencyId, newStatus, adminNote);
 
                     btnUpdateEmergency.setEnabled(true);
 

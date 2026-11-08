@@ -11,3 +11,10 @@ local.properties
 secrets.properties
 .DS_Store
 Thumbs.db
+
+# Firebase config (contains API key) - use app/google-services.json.example as template
+google-services.json
+**/google-services.json
+
+# Node (firestore-rules-tests)
+node_modules/

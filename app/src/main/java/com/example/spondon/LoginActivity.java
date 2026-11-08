@@ -1,4 +1,3 @@
-
 package com.example.spondon;
 
 import android.content.Intent;
@@ -11,11 +10,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.spondon.databinding.ActivityLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private ActivityLoginBinding binding;
     EditText etEmail, etPassword;
     RadioGroup roleGroup;
 
@@ -28,16 +29,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
+        etEmail = binding.etEmail;
+        etPassword = binding.etPassword;
 
-        roleGroup = findViewById(R.id.roleGroup);
+        roleGroup = binding.roleGroup;
 
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegister = findViewById(R.id.btnRegister);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        btnLogin = binding.btnLogin;
+        btnRegister = binding.btnRegister;
+        tvForgotPassword = binding.tvForgotPassword;
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -140,14 +142,20 @@ public class LoginActivity extends AppCompatActivity {
                                         "Login successful!",
                                         Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(
-                                        LoginActivity.this,
-                                        DashboardActivity.class
-                                );
-
-                                intent.putExtra("USER_ROLE", actualRole);
-
-                                startActivity(intent);
+                                if ("Admin".equals(actualRole)) {
+                                    Intent intent = new Intent(
+                                            LoginActivity.this,
+                                            AdminDashboardActivity.class
+                                    );
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(
+                                            LoginActivity.this,
+                                            DashboardActivity.class
+                                    );
+                                    intent.putExtra("USER_ROLE", actualRole);
+                                    startActivity(intent);
+                                }
                                 finish();
                             })
                             .addOnFailureListener(e -> {

@@ -1,63 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F7FA">
+    android:background="#F8FAFC"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvReportsTitle"
+    <!-- Top App Bar -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Manage Citizen Reports"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#172554"
-        android:padding="8dp"/>
+        android:background="#0F172A"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvReportCount"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnBackReports"
+                android:layout_width="72dp"
+                android:layout_height="36dp"
+                android:backgroundTint="#334155"
+                android:text="Back"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvReportsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MANAGE CIVIC REPORTS"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReportCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loading reports..."
+                    android:textColor="#94A3B8"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Search Input -->
+        <EditText
+            android:id="@+id/etSearchManageReports"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Search reports by title, category, or location..."
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textColor="#0F172A"
+            android:textColorHint="#94A3B8"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!-- Status Filter Chips -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total Reports: 0"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#334155"
-        android:padding="8dp"/>
+        android:background="#FFFFFF"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFilterReportAll"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#1D4ED8"
+                android:text="All"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btnFilterReportPending"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#E2E8F0"
+                android:text="Pending"
+                android:textColor="#0F172A"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btnFilterReportProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#E2E8F0"
+                android:text="In Progress"
+                android:textColor="#0F172A"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btnFilterReportResolved"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:backgroundTint="#E2E8F0"
+                android:text="Resolved"
+                android:textColor="#0F172A"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <ProgressBar
         android:id="@+id/progressReports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvNoReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No citizen reports found."
-        android:textSize="16sp"
-        android:textColor="#64748B"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:padding="24dp"
-        android:visibility="gone"/>
+        android:text="No citizen reports match the selected criteria."
+        android:textColor="#94A3B8"
+        android:textSize="15sp"
+        android:visibility="gone" />
 
+    <!-- Reports Scroll Container -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/layoutReportsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+    </ScrollView>
+
+    <!-- Legacy ListView (hidden for compatibility) -->
     <ListView
         android:id="@+id/lvReports"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="#CBD5E1"
-        android:dividerHeight="1dp"/>
-
-    <Button
-        android:id="@+id/btnBackReports"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back to Admin Dashboard"
-        android:layout_marginTop="12dp"/>
+        android:visibility="gone" />
 
 </LinearLayout>

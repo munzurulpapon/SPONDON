@@ -201,8 +201,54 @@ public class PublicProjectsActivity extends AppCompatActivity {
                         }
                     }
 
+                    if (allProjects.isEmpty()) {
+                        seedDefaultMunicipalProjects();
+                    }
+
                     displayProjects();
                 });
+    }
+
+
+    private void seedDefaultMunicipalProjects() {
+        Project p1 = new Project();
+        p1.id = "proj_rupsha_riverfront";
+        p1.title = "Rupsha Riverfront Eco-Walkway & Green Belt [DEMO]";
+        p1.description = "Construction of a 3.2km riverside pedestrian walkway, solar-powered LED lighting, sitting plazas and riverbank afforestation.";
+        p1.location = "Rupsha Ghat to Khan Jahan Ali Bridge";
+        p1.agency = "Khulna City Corporation (KCC) & KDA";
+        p1.status = "Ongoing";
+        p1.startDate = "2025-06-01";
+        p1.endDate = "2027-03-31";
+        p1.budget = 45000000;
+        p1.progress = 68;
+        allProjects.add(p1);
+
+        Project p2 = new Project();
+        p2.id = "proj_wasa_stormwater";
+        p2.title = "Khulna WASA Urban Stormwater Drainage System [DEMO]";
+        p2.description = "Excavation and modernization of 14km primary and secondary concrete drainage canals with automated sluice gates to mitigate monsoon waterlogging.";
+        p2.location = "Mujgunni, Boyra & Sonadanga Wards";
+        p2.agency = "Khulna WASA (KWASA)";
+        p2.status = "Ongoing";
+        p2.startDate = "2025-01-15";
+        p2.endDate = "2026-12-31";
+        p2.budget = 82000000;
+        p2.progress = 74;
+        allProjects.add(p2);
+
+        Project p3 = new Project();
+        p3.id = "proj_smart_traffic";
+        p3.title = "Smart City Traffic Management & Adaptive Signaling [DEMO]";
+        p3.description = "Installation of intelligent adaptive traffic light controllers, pedestrian push-button crossing signals and digital variable-message display boards.";
+        p3.location = "Shibbari, Dakbangla & Royal Intersection";
+        p3.agency = "Khulna Metropolitan Police & KCC";
+        p3.status = "Planned";
+        p3.startDate = "2026-12-01";
+        p3.endDate = "2027-11-30";
+        p3.budget = 18000000;
+        p3.progress = 25;
+        allProjects.add(p3);
     }
 
     private void displayProjects() {

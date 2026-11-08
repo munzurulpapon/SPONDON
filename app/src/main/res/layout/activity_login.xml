@@ -1,130 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7FA"
+    android:background="@color/surface_white"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:paddingStart="24dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp">
+
+        <!-- SPONDON Logo Mark & Branding -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="SPONDON Logo"
+            android:src="@drawable/ic_spondon_logo_mark" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SPONDON"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            android:textColor="#123B56"
-            android:layout_marginTop="35dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome Back!"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="#123B56"
-            android:layout_marginTop="35dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login to access your smart city services"
-            android:textSize="14sp"
-            android:textColor="#667788"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="28dp"/>
+            android:letterSpacing="0.06"
+            android:text="SPONDON"
+            android:textColor="@color/primary_blue"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Smart City • Safe City • Better Tomorrow"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Welcome Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Welcome Back!"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Sign in to continue"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+
+        <!-- Role Selector Pill -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Your Role"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#123B56"/>
+            android:layout_marginTop="18dp"
+            android:text="Select Role"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <RadioGroup
             android:id="@+id/roleGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_chip_unselected"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <RadioButton
                 android:id="@+id/rbCitizen"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Citizen"
+                android:layout_weight="1"
                 android:checked="true"
-                android:textColor="#123B56"/>
+                android:text="Citizen"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/rbProvider"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Service Provider"
-                android:textColor="#123B56"/>
+                android:layout_weight="1.2"
+                android:text="Provider"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/rbAdmin"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Admin"
-                android:textColor="#123B56"/>
-
+                android:textColor="@color/text_primary"
+                android:textSize="13sp" />
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/etEmail"
+        <!-- Email Field -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#123B56"/>
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_edit_text"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
-        <EditText
-            android:id="@+id/etPassword"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Email Icon"
+                android:src="@drawable/ic_email_blue" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@null"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Password Field -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
+            android:layout_height="52dp"
             android:layout_marginTop="12dp"
-            android:backgroundTint="#123B56"/>
+            android:background="@drawable/bg_edit_text"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
-        <TextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Forgot Password?"
-            android:textColor="#1976D2"
-            android:gravity="end"
-            android:layout_marginTop="15dp"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Password Icon"
+                android:src="@drawable/ic_lock_blue" />
 
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@null"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Login Button -->
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="LOGIN"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_button_primary"
+            android:text="Login"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#123B56"
-            android:layout_marginTop="25dp"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
+        <!-- OR Divider -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/card_border" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="OR"
+                android:textColor="@color/text_muted"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/card_border" />
+        </LinearLayout>
+
+        <!-- Create New Account Button -->
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="CREATE NEW ACCOUNT"
-            android:textColor="#123B56"
-            android:backgroundTint="#DCEAF2"
-            android:layout_marginTop="12dp"/>
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_button_secondary"
+            android:text="Create New Account"
+            android:textAllCaps="false"
+            android:textColor="@color/primary_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <!-- Forgot Password Link -->
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Forgot Password?"
+            android:textColor="@color/primary_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Skyline Vector Illustration at Bottom -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription="City Skyline"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_city_skyline_vector" />
 
     </LinearLayout>
 

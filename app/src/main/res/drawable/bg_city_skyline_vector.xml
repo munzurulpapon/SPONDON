@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="60dp"
+    android:viewportWidth="360"
+    android:viewportHeight="60">
+    <!-- Water / Base line -->
+    <path
+        android:fillColor="#E0F2FE"
+        android:pathData="M0,52 L360,52 L360,60 L0,60 Z" />
+
+    <!-- Distant faint towers -->
+    <path
+        android:fillColor="#BAE6FD"
+        android:pathData="M15,28 L30,28 L30,52 L15,52 Z M35,20 L48,20 L48,52 L35,52 Z M70,25 L85,25 L85,52 L70,52 Z M120,18 L138,18 L138,52 L120,52 Z M175,22 L192,22 L192,52 L175,52 Z M230,16 L248,16 L248,52 L230,52 Z M285,24 L302,24 L302,52 L285,52 Z M325,18 L345,18 L345,52 L325,52 Z" />
+
+    <!-- Foreground crisp skyline towers -->
+    <path
+        android:fillColor="#7DD3FC"
+        android:pathData="M5,35 L20,35 L20,52 L5,52 Z M55,30 L68,30 L68,52 L55,52 Z M92,26 L108,18 L114,26 L114,52 L92,52 Z M145,28 L160,28 L160,52 L145,52 Z M200,32 L215,32 L215,52 L200,52 Z M255,25 L265,16 L275,25 L275,52 L255,52 Z M310,30 L322,30 L322,52 L310,52 Z" />
+
+    <!-- Modern bridge cables / arches in center -->
+    <path
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="1.5"
+        android:pathData="M130,52 Q150,32 170,52 M170,52 Q190,32 210,52" />
+</vector>

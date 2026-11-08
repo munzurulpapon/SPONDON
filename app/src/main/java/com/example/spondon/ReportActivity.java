@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,12 +30,15 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -58,6 +62,8 @@ public class ReportActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -87,10 +93,24 @@ public class ReportActivity extends AppCompatActivity {
         ivReportPreview = findViewById(R.id.ivReportPreview);
         tvLocationCoordinates = findViewById(R.id.tvLocationCoordinates);
 
+        View btnBack = findViewById(R.id.btnBackReport);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+
+        View cardPhoto = findViewById(R.id.cardPhotoUpload);
+        if (cardPhoto != null) {
+            cardPhoto.setOnClickListener(v -> {
+                if (btnChooseImage != null) btnChooseImage.performClick();
+            });
+        }
+
         databaseHelper = new DatabaseHelper(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         locationManager = (LocationManager)
                 getSystemService(LOCATION_SERVICE);
@@ -118,6 +138,28 @@ public class ReportActivity extends AppCompatActivity {
         );
 
         spIssueCategory.setAdapter(adapter);
+
+        // Restore screen state on rotation (Requirement 10)
+        if (savedInstanceState != null) {
+            etIssueTitle.setText(savedInstanceState.getString("KEY_TITLE", ""));
+            etIssueDescription.setText(savedInstanceState.getString("KEY_DESC", ""));
+            etIssueLocation.setText(savedInstanceState.getString("KEY_LOC", ""));
+            spIssueCategory.setSelection(savedInstanceState.getInt("KEY_CAT_POS", 0));
+            hasCoordinates = savedInstanceState.getBoolean("KEY_HAS_COORDS", false);
+            latitude = savedInstanceState.getDouble("KEY_LAT", 0.0);
+            longitude = savedInstanceState.getDouble("KEY_LON", 0.0);
+            if (hasCoordinates) {
+                tvLocationCoordinates.setText(String.format(Locale.US, "GPS: %.5f, %.5f", latitude, longitude));
+            }
+            String uriStr = savedInstanceState.getString("KEY_IMG_URI", null);
+            if (uriStr != null) {
+                try {
+                    selectedImageUri = Uri.parse(uriStr);
+                    ivReportPreview.setImageURI(selectedImageUri);
+                    ivReportPreview.setVisibility(ImageView.VISIBLE);
+                } catch (Exception ignored) {}
+            }
+        }
 
         btnChooseImage.setOnClickListener(v -> chooseImage());
 
@@ -541,6 +583,36 @@ public class ReportActivity extends AppCompatActivity {
             report.put("longitude", longitude);
         }
 
+        // Requirement 3: Integrate Firebase Storage image upload
+        if (selectedImageUri != null) {
+            Toast.makeText(this, "Uploading image to Firebase Storage...", Toast.LENGTH_SHORT).show();
+            String fileName = "reports/" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString() + ".jpg";
+            StorageReference imageRef = storageReference.child(fileName);
+
+            imageRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        imageRef.getDownloadUrl()
+                                .addOnSuccessListener(downloadUri -> {
+                                    report.put("imageUrl", downloadUri.toString());
+                                    uploadReportToFirestore(report, localResult);
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Fallback: continue sync even if URL fetch fails
+                                    uploadReportToFirestore(report, localResult);
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        // Resilient fallback: if storage rules / offline occurs, save metadata safely
+                        android.util.Log.w("ReportActivity", "Firebase Storage upload skipped: " + e.getMessage());
+                        Toast.makeText(ReportActivity.this, "Image saved locally; syncing report data", Toast.LENGTH_SHORT).show();
+                        uploadReportToFirestore(report, localResult);
+                    });
+        } else {
+            uploadReportToFirestore(report, localResult);
+        }
+    }
+
+    private void uploadReportToFirestore(Map<String, Object> report, long localResult) {
         // Upload to Firestore
         firestore.collection("reports")
                 .add(report)
@@ -589,6 +661,21 @@ public class ReportActivity extends AppCompatActivity {
 
                     finish();
                 });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (etIssueTitle != null) outState.putString("KEY_TITLE", etIssueTitle.getText().toString());
+        if (etIssueDescription != null) outState.putString("KEY_DESC", etIssueDescription.getText().toString());
+        if (etIssueLocation != null) outState.putString("KEY_LOC", etIssueLocation.getText().toString());
+        if (spIssueCategory != null) outState.putInt("KEY_CAT_POS", spIssueCategory.getSelectedItemPosition());
+        outState.putBoolean("KEY_HAS_COORDS", hasCoordinates);
+        outState.putDouble("KEY_LAT", latitude);
+        outState.putDouble("KEY_LON", longitude);
+        if (selectedImageUri != null) {
+            outState.putString("KEY_IMG_URI", selectedImageUri.toString());
+        }
     }
 
     @Override

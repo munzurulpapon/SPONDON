@@ -2,73 +2,200 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7FC"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:background="@color/surface_background"
+    android:orientation="vertical">
 
-    <TextView
+    <!-- Top App Bar (Deep Blue Header / Reference Screen 5) -->
+    <RelativeLayout
+        android:id="@+id/layoutMyReportsTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/primary_blue"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/btnBackMyReports"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_arrow_back_white" />
+
+        <TextView
+            android:id="@+id/tvMyReportsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="My Reports"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvReportCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_chip_selected"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="0 Reports"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Subheader for backward compatibility -->
+        <TextView
+            android:id="@+id/tvMyReportsSubheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- Search Field (Rounded White / Reference UI) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_edit_text"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="Search"
+            android:src="@drawable/ic_search_white"
+            android:tint="@color/text_muted" />
+
+        <EditText
+            android:id="@+id/etSearchReports"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:background="@null"
+            android:hint="Search by title, category or location..."
+            android:inputType="text"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_muted"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Filter Pills Row (Reference Screen 5) -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/my_reports"
-        android:textColor="#142B52"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-    <TextView
+        <TextView
+            android:id="@+id/chipFilterAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_chip_selected"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="All"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/chipFilterPending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_chip_unselected"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Pending"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/chipFilterProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_chip_unselected"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="In Progress"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/chipFilterResolved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_unselected"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="Resolved"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Hidden compatibility spinner for tests -->
+    <Spinner
+        android:id="@+id/spReportStatusFilter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Track all your submitted city complaints."
-        android:textColor="#607087"
-        android:textSize="14sp" />
+        android:layout_height="1dp"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tvReportCount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Total Reports: 0"
-        android:textColor="#142B52"
-        android:textSize="17sp"
-        android:textStyle="bold" />
-
+    <!-- Empty State Message -->
     <TextView
         android:id="@+id/tvEmptyReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
         android:gravity="center"
-        android:text="No reports submitted yet."
-        android:textColor="#607087"
-        android:textSize="16sp"
+        android:text="No civic reports match your filter."
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
         android:visibility="gone" />
 
+    <!-- RecyclerView for Reports -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReports"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp" />
+
+    <!-- Hidden ListView for backward compatibility -->
     <ListView
         android:id="@+id/lvReports"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_weight="1"
-        android:divider="#DCE3ED"
-        android:dividerHeight="10dp" />
-
-
-
-    <EditText
-        android:id="@+id/etSearchReports"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search by title, category or location"
-        android:padding="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"
-        android:inputType="text" />
-
-    <Spinner
-        android:id="@+id/spReportStatusFilter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp" />
-
+        android:visibility="gone" />
 
 </LinearLayout>

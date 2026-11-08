@@ -1,0 +1,171 @@
+/* SPONDON Smart City - Modern Blue-and-White Theme CSS */
+:root {
+    --primary-blue: #0B4F9C;
+    --primary-blue-dark: #083B75;
+    --primary-blue-light: #E8F1FA;
+    --accent-cyan: #00B4D8;
+    --surface-bg: #F8FAFC;
+    --surface-card: #FFFFFF;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    --border-card: #E2E8F0;
+    --status-pending-bg: #FEF3C7;
+    --status-pending-text: #D97706;
+    --status-progress-bg: #DBEAFE;
+    --status-progress-text: #2563EB;
+    --status-resolved-bg: #DCFCE7;
+    --status-resolved-text: #16A34A;
+    --emergency-red: #DC2626;
+    --radius-card: 16px;
+    --radius-pill: 20px;
+    --radius-btn: 14px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--surface-bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header & Hero */
+.header-hero {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+    color: #FFFFFF;
+    border-radius: var(--radius-card);
+    padding: 24px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(11, 79, 156, 0.2);
+}
+
+.header-hero h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.header-hero p {
+    font-size: 13px;
+    color: #E2E8F0;
+}
+
+/* Rounded Cards */
+.card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:active {
+    transform: scale(0.99);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.card-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+/* Status Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+}
+
+.badge-progress {
+    background-color: var(--status-progress-bg);
+    color: var(--status-progress-text);
+}
+
+.badge-resolved {
+    background-color: var(--status-resolved-bg);
+    color: var(--status-resolved-text);
+}
+
+.badge-emergency {
+    background-color: #FEE2E2;
+    color: var(--emergency-red);
+}
+
+/* Buttons */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: #FFFFFF;
+}
+
+.btn-primary:active {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: var(--primary-blue-light);
+    color: var(--primary-blue);
+}
+
+.btn-danger {
+    background-color: var(--emergency-red);
+    color: #FFFFFF;
+}
+
+/* Responsive Grid */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

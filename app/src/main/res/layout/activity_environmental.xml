@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7FC"
+    android:orientation="vertical">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#15803D"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENVIRONMENTAL SERVICES"
+            android:textColor="#FFFFFF"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Air quality monitoring, urban greening, cleanliness and pollution reporting"
+            android:textColor="#DCFCE7"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvDataSourceTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#166534"
+            android:padding="4dp"
+            android:text="[DEMO DATA - Municipal Environmental &amp; Pollution Monitoring]"
+            android:textColor="#FEF08A"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Simulated Live Air Quality Index (AQI) Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KHULNA AIR QUALITY INDEX (AQI)"
+                    android:textColor="#166534"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvAqiValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FEF3C7"
+                        android:padding="12dp"
+                        android:text="68"
+                        android:textColor="#B45309"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvAqiStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MODERATE AIR QUALITY"
+                            android:textColor="#B45309"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAqiDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="PM2.5: 22 µg/m³ • PM10: 45 µg/m³ • Ozone: Good"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvAqiAdvisory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Health Advisory: Air quality is generally acceptable. Sensitive groups with respiratory illnesses should reduce prolonged exertion near congested traffic corridors (Shibbari &amp; Royal Mor)."
+                    android:textColor="#475569"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- Report Environmental Hazard Action Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#DCFCE7"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REPORT ENVIRONMENTAL VIOLATION"
+                    android:textColor="#166534"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Spot illegal industrial river dumping, black exhaust smoke, open garbage fires or unauthorized tree felling? Take photo and submit GPS report."
+                    android:textColor="#15803D"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btnReportEcoIssue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#166534"
+                    android:text="Report Environmental Issue (Photo &amp; GPS)"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+
+            <!-- Cleanliness & Greening Guidelines -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="10dp"
+                android:text="MUNICIPAL GREEN INITIATIVES &amp; GUIDELINES"
+                android:textColor="#142B52"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Guideline Card 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌿 Single-Use Plastic Prohibition in KCC Markets"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Under the Clean Khulna directive, polyethylene shopping bags below 55 microns are banned in all city bazaars. Citizens are urged to carry reusable jute bags. Violations incur spot fines under municipal environmental bylaws."
+                    android:textColor="#475569"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- Guideline Card 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💧 River Bhairab &amp; Rupsha Waterway Protection"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Industrial units along the Rupsha riverfront are required to operate Effluent Treatment Plants (ETP). Direct discharge of chemical dyes, heavy metals or untreated hospital waste into city rivers is strictly monitored."
+                    android:textColor="#475569"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- Guideline Card 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌳 Hadis Park Municipal Free Seedling Collection"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Citizens can collect up to 3 complimentary neem, mahogany, and fruit saplings from the KCC Forestry Counter at Shaheed Hadis Park (Open Mon-Thu 10 AM - 04 PM). Bring citizen NID or student card."
+                    android:textColor="#475569"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnBackEnvironmental"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Back to Dashboard" />
+
+</LinearLayout>

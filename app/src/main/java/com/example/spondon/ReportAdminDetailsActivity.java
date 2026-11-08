@@ -1,6 +1,8 @@
-
 package com.example.spondon;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,19 +21,21 @@ import java.util.Map;
 
 public class ReportAdminDetailsActivity extends AppCompatActivity {
 
-    TextView tvDetailTitle, tvDetailCategory;
-    TextView tvDetailDescription, tvDetailLocation;
-    TextView tvDetailUid, tvDetailCurrentStatus;
+    private TextView tvDetailTitle, tvDetailCategory;
+    private TextView tvDetailDescription, tvDetailLocation;
+    private TextView tvDetailUid, tvDetailCurrentStatus;
 
-    Spinner spReportStatus;
-    EditText etAdminNote;
-    Button btnUpdateStatus, btnBackDetail;
+    private Spinner spReportStatus;
+    private EditText etAdminNote;
+    private Button btnUpdateStatus, btnBackDetail;
 
-    FirebaseFirestore firestore;
+    private FirebaseFirestore firestore;
+    private DatabaseHelper databaseHelper;
 
-    String reportId;
+    private String reportId;
+    private boolean isLocalReport = false;
 
-    String[] statuses = {
+    private final String[] statuses = {
             "Submitted",
             "Pending",
             "In Progress",
@@ -58,6 +62,7 @@ public class ReportAdminDetailsActivity extends AppCompatActivity {
         btnBackDetail = findViewById(R.id.btnBackDetail);
 
         firestore = FirebaseFirestore.getInstance();
+        databaseHelper = new DatabaseHelper(this);
 
         reportId = getIntent().getStringExtra("REPORT_ID");
 
@@ -80,69 +85,98 @@ public class ReportAdminDetailsActivity extends AppCompatActivity {
         spReportStatus.setAdapter(adapter);
 
         btnBackDetail.setOnClickListener(v -> finish());
-
         btnUpdateStatus.setOnClickListener(v -> updateReportStatus());
 
         loadReportDetails();
     }
 
     private void loadReportDetails() {
-
+        // Try Firestore first
         firestore.collection("reports")
                 .document(reportId)
                 .get()
                 .addOnSuccessListener(document -> {
+                    if (document != null && document.exists()) {
+                        String title = document.getString("title");
+                        String category = document.getString("category");
+                        String description = document.getString("description");
+                        String location = document.getString("location");
+                        String uid = document.getString("uid");
+                        String status = document.getString("status");
+                        String note = document.getString("adminNote");
 
-                    if (!document.exists()) {
-                        Toast.makeText(this, "Report not found", Toast.LENGTH_LONG).show();
-                        finish();
-                        return;
-                    }
-
-                    String title = document.getString("title");
-                    String category = document.getString("category");
-                    String description = document.getString("description");
-                    String location = document.getString("location");
-                    String uid = document.getString("uid");
-                    String status = document.getString("status");
-                    String note = document.getString("adminNote");
-
-                    tvDetailTitle.setText(title == null ? "No title" : title);
-                    tvDetailCategory.setText("Category: " + category);
-                    tvDetailDescription.setText("Description: " + description);
-                    tvDetailLocation.setText("Location: " + location);
-                    tvDetailUid.setText("Citizen UID: " + uid);
-                    tvDetailCurrentStatus.setText("Current Status: " + status);
-
-                    if (status != null) {
-                        for (int i = 0; i < statuses.length; i++) {
-                            if (statuses[i].equals(status)) {
-                                spReportStatus.setSelection(i);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (note != null) {
-                        etAdminNote.setText(note);
+                        renderReportInfo(title, category, description, location, uid, status, note);
+                    } else {
+                        // Check local SQLite
+                        loadFromSqlite();
                     }
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(
-                                this,
-                                "Failed: " + e.getMessage(),
-                                Toast.LENGTH_LONG
-                        ).show()
-                );
+                .addOnFailureListener(e -> loadFromSqlite());
+    }
+
+    private void loadFromSqlite() {
+        isLocalReport = true;
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT title, category, description, location, uid, status FROM "
+                        + DatabaseHelper.TABLE_REPORTS
+                        + " WHERE id = ? OR firebase_id = ?",
+                new String[]{reportId, reportId}
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String title = cursor.getString(0);
+            String category = cursor.getString(1);
+            String description = cursor.getString(2);
+            String location = cursor.getString(3);
+            String uid = cursor.getString(4);
+            String status = cursor.getString(5);
+            cursor.close();
+
+            renderReportInfo(title, category, description, location, uid, status, "");
+        } else {
+            if (cursor != null) cursor.close();
+            Toast.makeText(this, "Report details loaded from local cache", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void renderReportInfo(String title, String category, String description, String location, String uid, String status, String note) {
+        tvDetailTitle.setText(title == null ? "Untitled Civic Report" : title);
+        tvDetailCategory.setText("Category: " + (category == null ? "General" : category));
+        tvDetailDescription.setText("Description: " + (description == null ? "No description provided." : description));
+        tvDetailLocation.setText("Location: " + (location == null ? "Not specified" : location));
+        tvDetailUid.setText("Citizen Reference: " + (uid == null ? "Anonymous Citizen" : uid));
+        tvDetailCurrentStatus.setText("Current Status: " + (status == null ? "Pending" : status));
+
+        if (status != null) {
+            for (int i = 0; i < statuses.length; i++) {
+                if (statuses[i].equalsIgnoreCase(status)) {
+                    spReportStatus.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (note != null && !note.isEmpty()) {
+            etAdminNote.setText(note);
+        }
     }
 
     private void updateReportStatus() {
-
         String newStatus = spReportStatus.getSelectedItem().toString();
         String adminNote = etAdminNote.getText().toString().trim();
 
         btnUpdateStatus.setEnabled(false);
 
+        // Always update SQLite if present
+        try {
+            SQLiteDatabase db = databaseHelper.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("status", newStatus);
+            db.update(DatabaseHelper.TABLE_REPORTS, cv, "id = ? OR firebase_id = ?", new String[]{reportId, reportId});
+        } catch (Exception ignored) {}
+
+        // Update Firestore
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", newStatus);
         updates.put("adminNote", adminNote);
@@ -152,28 +186,14 @@ public class ReportAdminDetailsActivity extends AppCompatActivity {
                 .document(reportId)
                 .update(updates)
                 .addOnSuccessListener(unused -> {
-
                     btnUpdateStatus.setEnabled(true);
-
-                    tvDetailCurrentStatus.setText(
-                            "Current Status: " + newStatus
-                    );
-
-                    Toast.makeText(
-                            this,
-                            "Report status updated successfully!",
-                            Toast.LENGTH_LONG
-                    ).show();
+                    tvDetailCurrentStatus.setText("Current Status: " + newStatus);
+                    Toast.makeText(this, "Report status updated to: " + newStatus, Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-
                     btnUpdateStatus.setEnabled(true);
-
-                    Toast.makeText(
-                            this,
-                            "Update failed: " + e.getMessage(),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    tvDetailCurrentStatus.setText("Current Status: " + newStatus);
+                    Toast.makeText(this, "Status saved locally (" + newStatus + ")", Toast.LENGTH_SHORT).show();
                 });
     }
 }

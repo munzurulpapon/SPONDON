@@ -1,0 +1,346 @@
+rules_version = '2';
+
+// =====================================================================
+// SPONDON - complete Firestore rules
+//
+//   1. Helpers
+//   2. community_posts (+ comments)      <- kept exactly as delivered before
+//   3. civic_wallets  (NEW, server-enforced rewards ledger)
+//   4. civic_rewards  (OLD wallet, now read-only: its rule trusted a
+//                      client-computed balance and has been closed)
+//   5. Other app collections (BASELINE - see note in that section)
+// =====================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -----------------------------------------------------------------
+    // 1. Helpers
+    // -----------------------------------------------------------------
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Admin accounts are created by hand (the app only registers Citizen / Service Provider)
+    // with users/{uid}.role == 'Admin'; LoginActivity requires exactly that value to open the
+    // admin dashboard.
+    function isAdmin() {
+      return signedIn()
+          && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'Admin';
+    }
+
+    // A job posting written by Admin -> Job Management -> Publish Job.
+    function validJob() {
+      let j = request.resource.data;
+      return j.title is string && j.title.size() > 0
+          && j.company is string && j.company.size() > 0
+          && j.location is string && j.location.size() > 0;
+    }
+
+    // Vouchers: the ONLY (perkId, cost) pairs that can ever be redeemed.
+    // Keep in sync with RewardsActivity.java.
+    function validPerk(perkId, cost) {
+      return (perkId == 'library_pass' && cost == 100)
+          || (perkId == 'kda_parking'  && cost == 150);
+    }
+
+    // A point award. Points come ONLY from here, and only for things that
+    // verifiably exist in Firestore and belong to this user. creditId is
+    // deterministic, so each source can be credited once (credits are
+    // create-only).
+    function validCredit(userId, creditId, c) {
+      return c.keys().hasOnly(['uid', 'kind', 'sourceId', 'points', 'createdAt'])
+          && c.keys().hasAll(['uid', 'kind', 'sourceId', 'points', 'createdAt'])
+          && c.uid == userId
+          && c.createdAt == request.time
+          && c.sourceId is string
+          && (
+               (c.kind == 'welcome'
+                  && creditId == 'welcome'
+                  && c.sourceId == 'welcome'
+                  && c.points == 50)
+            || (c.kind == 'report'
+                  && creditId == 'report_' + c.sourceId
+                  && c.points == 50
+                  && get(/databases/$(database)/documents/reports/$(c.sourceId)).data.uid == userId)
+            || (c.kind == 'blood'
+                  && creditId == 'blood_' + c.sourceId
+                  && c.points == 100
+                  && get(/databases/$(database)/documents/blood_donors/$(c.sourceId)).data.uid == userId)
+            || (c.kind == 'job'
+                  && creditId == 'job_' + c.sourceId
+                  && c.points == 30
+                  && get(/databases/$(database)/documents/job_applications/$(c.sourceId)).data.applicantUid == userId)
+            || (c.kind == 'post'
+                  && creditId == 'post_' + c.sourceId
+                  && c.points == 20
+                  && get(/databases/$(database)/documents/community_posts/$(c.sourceId)).data.authorUid == userId)
+          );
+    }
+
+    // For collections that feed the points ledger: the owner field may be
+    // set at creation only to the caller's own uid (or left out), and can
+    // never be changed afterwards. This stops someone re-assigning another
+    // person's document to themselves to claim its points.
+    function ownerFieldOnCreateOk(field) {
+      return !(field in request.resource.data)
+          || request.resource.data[field] == null
+          || request.resource.data[field] == request.auth.uid;
+    }
+
+    function ownerFieldUnchanged(field) {
+      return request.resource.data.get(field, null) == resource.data.get(field, null);
+    }
+
+    // -----------------------------------------------------------------
+    // 2. Community  (unchanged)
+    // -----------------------------------------------------------------
+    match /community_posts/{postId} {
+
+      allow read: if signedIn();
+
+      // Normal posts: written by their author, start with 0 votes.
+      // Demo posts: fixed ids seed_1, seed_2, ... (first-run seeding).
+      allow create: if signedIn()
+        && request.resource.data.voterIds.size() == 0
+        && (
+          (request.resource.data.authorUid == request.auth.uid
+            && request.resource.data.upvotes == 0)
+          || postId.matches('seed_[0-9]+')
+        );
+
+      // The ONLY allowed change to a post: the signed-in user adds their own
+      // uid to voterIds (once) and upvotes goes up by exactly 1.
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['upvotes', 'voterIds'])
+        && !(request.auth.uid in resource.data.voterIds)
+        && request.resource.data.voterIds
+             == resource.data.voterIds.concat([request.auth.uid])
+        && request.resource.data.upvotes == resource.data.upvotes + 1;
+
+      allow delete: if false;
+
+      match /comments/{commentId} {
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.createdAt == request.time;
+
+        allow update, delete: if false;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // 3. Civic wallet (server-enforced)
+    //
+    // A wallet write is only accepted together with exactly ONE new event
+    // document written in the same atomic request:
+    //   lastEventType == 'credit' -> credits/{lastEventId}
+    //   lastEventType == 'redeem' -> redemptions/{lastEventId}
+    // and the numbers must add up exactly:
+    //   credit : balance == old + credit.points
+    //   redeem : old >= cost, balance == old - cost, perk/cost valid
+    // The event documents in turn point back at the wallet (getAfter), so a
+    // request containing two events, or an event the wallet doesn't match,
+    // is rejected as a whole.
+    // -----------------------------------------------------------------
+    match /civic_wallets/{userId} {
+
+      function walletPath() {
+        return /databases/$(database)/documents/civic_wallets/$(userId);
+      }
+
+      function creditPath(id) {
+        return /databases/$(database)/documents/civic_wallets/$(userId)/credits/$(id);
+      }
+
+      function redemptionPath(id) {
+        return /databases/$(database)/documents/civic_wallets/$(userId)/redemptions/$(id);
+      }
+
+      function prevBalance() {
+        return resource == null ? 0 : resource.data.balance;
+      }
+
+      function prevEarned() {
+        return resource == null ? 0 : resource.data.totalEarned;
+      }
+
+      function prevSpent() {
+        return resource == null ? 0 : resource.data.totalSpent;
+      }
+
+      function walletShapeOk() {
+        let w = request.resource.data;
+        return w.keys().hasOnly(['uid', 'balance', 'totalEarned', 'totalSpent',
+                                 'lastEventType', 'lastEventId', 'updatedAt'])
+            && w.keys().hasAll(['uid', 'balance', 'totalEarned', 'totalSpent',
+                                'lastEventType', 'lastEventId', 'updatedAt'])
+            && w.uid == userId
+            && w.balance is int && w.balance >= 0
+            && w.totalEarned is int
+            && w.totalSpent is int
+            && w.lastEventId is string
+            && w.updatedAt == request.time;
+      }
+
+      function isCreditEvent() {
+        let w = request.resource.data;
+        let c = getAfter(creditPath(w.lastEventId)).data;
+        return !exists(creditPath(w.lastEventId))            // brand-new credit
+            && c.uid == userId
+            && w.balance == prevBalance() + c.points
+            && w.totalEarned == prevEarned() + c.points
+            && w.totalSpent == prevSpent();
+      }
+
+      function isRedeemEvent() {
+        let w = request.resource.data;
+        let r = getAfter(redemptionPath(w.lastEventId)).data;
+        return !exists(redemptionPath(w.lastEventId))        // brand-new redemption
+            && r.uid == userId
+            && validPerk(r.perkId, r.cost)                   // exact price per voucher
+            && prevBalance() >= r.cost                       // sufficient balance
+            && w.balance == prevBalance() - r.cost           // exact deduction
+            && w.totalSpent == prevSpent() + r.cost
+            && w.totalEarned == prevEarned()
+            && r.balanceBefore == prevBalance()
+            && r.balanceAfter == w.balance;
+      }
+
+      allow read: if isOwner(userId);
+
+      allow create, update: if isOwner(userId)
+        && walletShapeOk()
+        && (
+             (request.resource.data.lastEventType == 'credit' && isCreditEvent())
+          || (request.resource.data.lastEventType == 'redeem' && isRedeemEvent())
+        );
+
+      allow delete: if false;
+
+      // Point awards (create-only, validated against the real source doc).
+      match /credits/{creditId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && validCredit(userId, creditId, request.resource.data)
+          && getAfter(walletPath()).data.lastEventType == 'credit'
+          && getAfter(walletPath()).data.lastEventId == creditId;
+
+        allow update, delete: if false;
+      }
+
+      // Redemption history (append-only).
+      match /redemptions/{redemptionId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['uid', 'perkId', 'perkName', 'cost',
+                                                   'couponCode', 'balanceBefore',
+                                                   'balanceAfter', 'redeemedAt'])
+          && request.resource.data.keys().hasAll(['uid', 'perkId', 'perkName', 'cost',
+                                                  'couponCode', 'balanceBefore',
+                                                  'balanceAfter', 'redeemedAt'])
+          && request.resource.data.uid == userId
+          && validPerk(request.resource.data.perkId, request.resource.data.cost)
+          && request.resource.data.redeemedAt == request.time
+          && getAfter(walletPath()).data.lastEventType == 'redeem'
+          && getAfter(walletPath()).data.lastEventId == redemptionId;
+
+        allow update, delete: if false;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // 4. Old wallet from the previous version: READ-ONLY.
+    //    Its write rule accepted a client-supplied earned-points figure,
+    //    which is the gap being closed. Existing documents are kept.
+    // -----------------------------------------------------------------
+    match /civic_rewards/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if false;
+
+      match /redemptions/{redemptionId} {
+        allow read: if isOwner(userId);
+        allow write: if false;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // 5. Other app collections - BASELINE
+    //
+    // The project does not contain your published console rules, so I could
+    // not copy them. If your console already has rules for these collections,
+    // KEEP YOURS and only add the ownership lines marked  (*)  to reports,
+    // blood_donors and job_applications - they are required so that points
+    // cannot be claimed on documents the user does not own.
+    // Everything else below is a signed-in-only baseline matching how the
+    // app uses each collection.
+    // -----------------------------------------------------------------
+
+    match /reports/{reportId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && ownerFieldOnCreateOk('uid');          // (*)
+      allow update: if signedIn() && ownerFieldUnchanged('uid');           // (*)
+      allow delete: if signedIn();
+    }
+
+    match /blood_donors/{donorId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && ownerFieldOnCreateOk('uid');          // (*)
+      allow update: if signedIn() && ownerFieldUnchanged('uid');           // (*)
+      allow delete: if signedIn();
+    }
+
+    match /job_applications/{applicationId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && ownerFieldOnCreateOk('applicantUid'); // (*)
+      allow update: if signedIn() && ownerFieldUnchanged('applicantUid');  // (*)
+      allow delete: if signedIn();
+    }
+
+    match /users/{userId} {
+      allow read, write: if signedIn();
+    }
+
+    match /emergencies/{emergencyId} {
+      allow read, write: if signedIn();
+    }
+
+    // Citizens create requests, providers pick them up from the open pool (an unfiltered query),
+    // and Admin -> Monitor Citizen Service Requests lists them all. Rules do not filter query
+    // results, so reads must stay open to any signed-in user or those unfiltered queries fail.
+    match /service_requests/{requestId} {
+      allow read, write: if signedIn();
+    }
+
+    match /services/{serviceId} {
+      allow read, write: if signedIn();
+    }
+
+    // Jobs Opportunities (citizens) reads this collection; only Admin -> Job Management writes it.
+    match /jobs/{jobId} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin() && validJob();
+      allow delete: if isAdmin();
+    }
+
+    match /projects/{projectId} {
+      allow read, write: if signedIn();
+
+      match /updates/{updateId} {
+        allow read, write: if signedIn();
+      }
+    }
+  }
+}

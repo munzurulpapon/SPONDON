@@ -1,0 +1,12 @@
+{
+  "name": "spondon-rules-tests",
+  "private": true,
+  "scripts": {
+    "test": "firebase emulators:exec --only firestore --project spondon-test \"node --test rewards.test.js\"",
+    "test:admin": "firebase emulators:exec --only firestore --project spondon-test \"node --test admin_jobs_requests.test.js\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "firebase": "^10.12.0"
+  }
+}

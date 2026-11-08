@@ -4,6 +4,21 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+// ---- Secrets (never commit real keys) ------------------------------------
+// MAPTILER_API_KEY is read from local.properties (git-ignored) or from an
+// environment variable (useful for CI). It is exposed to the app as
+// R.string.maptiler_api_key, so no Java code needs to change.
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { localProps.load(it) }
+}
+def maptilerApiKey = localProps.getProperty('MAPTILER_API_KEY') ?: System.getenv('MAPTILER_API_KEY') ?: ''
+if (maptilerApiKey.isEmpty()) {
+    logger.warn('WARNING: MAPTILER_API_KEY is not set in local.properties - map tiles will not load.')
+}
+// --------------------------------------------------------------------------
+
 android {
     namespace 'com.example.spondon'
     compileSdk 32
@@ -14,6 +29,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        resValue "string", "maptiler_api_key", maptilerApiKey
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,6 +44,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -54,6 +74,8 @@ dependencies {
 
     // Firebase Storage
     implementation 'com.google.firebase:firebase-storage'
+    // Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database'
 
     // Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging'

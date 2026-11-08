@@ -1,0 +1,460 @@
+package com.example.spondon;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+public class DisasterManagementActivity extends AppCompatActivity {
+
+    private EditText etSearchDisaster;
+    private TextView tvDisasterCount, tvNoDisasterResults;
+    private LinearLayout layoutDisasterContainer;
+    // Layout declares this as an ImageView, so it must NOT be typed as Button (ClassCastException)
+    private View btnBackDisaster;
+
+    private Button btnDisAll, btnDisShelters, btnDisCyclone, btnDisFlood, btnDisEarthquake, btnDisFire;
+
+    private final List<DisasterItem> itemList = new ArrayList<>();
+    private String selectedCategory = "All";
+    private String searchQuery = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_disaster_management);
+
+        etSearchDisaster = findViewById(R.id.etSearchDisaster);
+        tvDisasterCount = findViewById(R.id.tvDisasterCount);
+        tvNoDisasterResults = findViewById(R.id.tvNoDisasterResults);
+        layoutDisasterContainer = findViewById(R.id.layoutDisasterContainer);
+        btnBackDisaster = findViewById(R.id.btnBackDisaster);
+
+        btnDisAll = findViewById(R.id.btnDisAll);
+        btnDisShelters = findViewById(R.id.btnDisShelters);
+        btnDisCyclone = findViewById(R.id.btnDisCyclone);
+        btnDisFlood = findViewById(R.id.btnDisFlood);
+        btnDisEarthquake = findViewById(R.id.btnDisEarthquake);
+        btnDisFire = findViewById(R.id.btnDisFire);
+
+        if (btnBackDisaster != null) btnBackDisaster.setOnClickListener(v -> finish());
+
+        View more = findViewById(R.id.btnViewMoreGuidelines);
+        if (more != null) {
+            more.setOnClickListener(v -> {
+                setCategory("Cyclone");
+                if (layoutDisasterContainer != null) layoutDisasterContainer.requestFocus();
+            });
+        }
+
+        try {
+            setupFilters();
+            setupSearch();
+            loadDisasterData();
+            displayItems();
+        } catch (Exception e) {
+            android.util.Log.e("DisasterActivity", "Failed to build screen", e);
+            Toast.makeText(this, "Some guidelines could not be loaded.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setupFilters() {
+        bindChip(btnDisAll, "All");
+        bindChip(btnDisShelters, "Shelter");
+        bindChip(btnDisCyclone, "Cyclone");
+        bindChip(btnDisFlood, "Flood");
+        bindChip(btnDisEarthquake, "Earthquake");
+        bindChip(btnDisFire, "Fire");
+    }
+
+    private void bindChip(Button b, String category) {
+        if (b != null) b.setOnClickListener(v -> setCategory(category));
+    }
+
+    private void setCategory(String category) {
+        selectedCategory = category;
+        Button[] chips = {btnDisAll, btnDisShelters, btnDisCyclone, btnDisFlood, btnDisEarthquake, btnDisFire};
+        String[] cats = {"All", "Shelter", "Cyclone", "Flood", "Earthquake", "Fire"};
+        for (int i = 0; i < chips.length; i++) {
+            if (chips[i] == null) continue;
+            boolean sel = cats[i].equals(category);
+            chips[i].setBackgroundResource(sel ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
+            chips[i].setTextColor(sel ? Color.WHITE : getResources().getColor(R.color.text_secondary));
+        }
+        displayItems();
+    }
+
+    private void setupSearch() {
+        if (etSearchDisaster == null) return;
+        etSearchDisaster.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchQuery = s.toString().trim().toLowerCase(Locale.ROOT);
+                displayItems();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void loadDisasterData() {
+        itemList.clear();
+
+        // 1. Emergency Shelters
+        itemList.add(new DisasterItem(
+                "Dacope Multi-Purpose Cyclone Shelter Complex",
+                "Shelter",
+                "Dacope Upazila Sadar, Khulna",
+                "Capacity: 1,800 Citizens • Livestock Floor: 300 Cattle",
+                "Facilities: Solar power generator, high-capacity rainwater harvesting tank, emergency medical post, separate female dormitories.",
+                "01711-223344",
+                true,
+                22.5720, 89.5100
+        ));
+
+        itemList.add(new DisasterItem(
+                "Boyra Model School & College Disaster Relief Shelter",
+                "Shelter",
+                "Boyra Main Road, Khulna Sadar",
+                "Capacity: 1,200 Persons",
+                "Facilities: Elevated concrete plinth above flood level, standby generator, clean water tubewell, dry ration store.",
+                "041-760440",
+                true,
+                22.8410, 89.5420
+        ));
+
+        itemList.add(new DisasterItem(
+                "Rupsha Flood Refuge & Community Emergency Center",
+                "Shelter",
+                "East Bank Approach Road, Rupsha, Khulna",
+                "Capacity: 950 Persons • 150 Livestock",
+                "Facilities: Boat rescue dock, Red Crescent emergency triage post, emergency communication VHF wireless station.",
+                "01819-334455",
+                true,
+                22.8080, 89.5790
+        ));
+
+        itemList.add(new DisasterItem(
+                "Gollamari Municipal Disaster Refuge Hub",
+                "Shelter",
+                "Gollamari Bypass Road, Khulna",
+                "Capacity: 800 Persons",
+                "Facilities: Water purification plant, medical first aid supplies, community kitchen hall, accessible ramps.",
+                "041-721550",
+                true,
+                22.8020, 89.5410
+        ));
+
+        // 2. Cyclone & Storm Surge Guidelines
+        itemList.add(new DisasterItem(
+                "Cyclone & Storm Surge Action Checklist",
+                "Cyclone",
+                "Coastal & Riverine Wards",
+                "Signal 4 to Signal 10 Protocol",
+                "• Pre-Cyclone: Pack an emergency grab-bag (dry food, potable water in sealed bottles, torch, radio, whistle, important documents in plastic).\n• Evacuation: Move to designated cyclone shelter before Signal 7 is hoisted.\n• Post-Cyclone: Do not touch fallen electricity wires or waterlogged poles. Boil all drinking water for minimum 10 minutes.",
+                "1090 (National Disaster Hotline)",
+                false,
+                22.8456, 89.5403
+        ));
+
+        // 3. Flood & Waterlogging Guidelines
+        itemList.add(new DisasterItem(
+                "Monsoon Flooding & Waterlogging Safety Protocol",
+                "Flood",
+                "City Low-Lying Wards & River Embankments",
+                "Immediate Household Safety",
+                "• Electrical Safety: Cut main power breaker switch if water begins rising inside the ground floor.\n• Sanitation: Use chlorine water purification tablets (1 tablet per 5 liters).\n• Snakebite First Aid: Keep patient immobilized and calm. Do not cut or tie tourniquet; rush immediately to KMCH Hospital.",
+                "041-720133 (KCC Flood Control Desk)",
+                false,
+                22.8456, 89.5403
+        ));
+
+        // 4. Earthquake Preparedness
+        itemList.add(new DisasterItem(
+                "Earthquake Emergency Response: Drop, Cover, and Hold On",
+                "Earthquake",
+                "All Residential & Commercial Buildings",
+                "During & After Shocks",
+                "• If Indoors: DROP to the ground, take COVER under a sturdy table or desk, and HOLD ON until shaking stops.\n• Stay away from glass windows, unanchored bookcases, and brick exterior walls.\n• Never use elevators during an earthquake. Once shaking ceases, evacuate via stairs to open grounds (e.g. Hadis Park).",
+                "999 (National Emergency)",
+                false,
+                22.8456, 89.5403
+        ));
+
+        // 5. Fire Safety
+        itemList.add(new DisasterItem(
+                "Urban Fire Outbreak & Smoke Survival Guide",
+                "Fire",
+                "Residential & Commercial Establishments",
+                "Rapid Response",
+                "• Evacuation: If smoke is present, crawl low under the smoke where fresh air is available.\n• PASS Extinguisher Technique: Pull pin, Aim nozzle at base of fire, Squeeze handle, Sweep side-to-side.\n• Immediate Hotline: Dial Fire Service 16163 or 999 without delay.",
+                "16163 (Fire Service Control)",
+                false,
+                22.8456, 89.5403
+        ));
+
+        // Requirement 7: Runtime XML parsing using XmlPullParser
+        parseXmlDisasterProtocols();
+    }
+
+    private void parseXmlDisasterProtocols() {
+        try {
+            org.xmlpull.v1.XmlPullParser parser = getResources().getXml(R.xml.khulna_disaster_protocols);
+            int eventType = parser.getEventType();
+
+            String title = "", category = "", location = "", capacity = "", details = "", phone = "";
+            boolean isShelter = false;
+            double lat = 22.8456, lon = 89.5403;
+            String currentTag = "";
+
+            while (eventType != org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {
+                if (eventType == org.xmlpull.v1.XmlPullParser.START_TAG) {
+                    currentTag = parser.getName();
+                } else if (eventType == org.xmlpull.v1.XmlPullParser.TEXT) {
+                    String text = parser.getText() != null ? parser.getText().trim() : "";
+                    if (!text.isEmpty()) {
+                        switch (currentTag == null ? "" : currentTag) {
+                            case "title": title = text; break;
+                            case "category": category = text; break;
+                            case "location": location = text; break;
+                            case "capacity": capacity = text; break;
+                            case "details": details = text; break;
+                            case "phone": phone = text; break;
+                            case "isShelter": isShelter = Boolean.parseBoolean(text); break;
+                            case "lat":
+                                try { lat = Double.parseDouble(text); } catch (Exception ignored) {}
+                                break;
+                            case "lon":
+                                try { lon = Double.parseDouble(text); } catch (Exception ignored) {}
+                                break;
+                        }
+                    }
+                } else if (eventType == org.xmlpull.v1.XmlPullParser.END_TAG) {
+                    if ("protocol".equals(parser.getName())) {
+                        if (!title.isEmpty()) {
+                            itemList.add(new DisasterItem(
+                                    title + " [XML PARSED]",
+                                    category.isEmpty() ? "General" : category,
+                                    location,
+                                    capacity,
+                                    details,
+                                    phone,
+                                    isShelter,
+                                    lat,
+                                    lon
+                            ));
+                        }
+                        title = ""; category = ""; location = ""; capacity = ""; details = ""; phone = "";
+                        isShelter = false; lat = 22.8456; lon = 89.5403;
+                    }
+                    currentTag = "";
+                }
+                eventType = parser.next();
+            }
+        } catch (Exception e) {
+            android.util.Log.w("DisasterActivity", "XmlPullParser error: " + e.getMessage());
+        }
+    }
+
+    private void displayItems() {
+        layoutDisasterContainer.removeAllViews();
+        int visibleCount = 0;
+
+        for (DisasterItem item : itemList) {
+            boolean matchesCategory = selectedCategory.equals("All")
+                    || item.category.equalsIgnoreCase(selectedCategory);
+
+            boolean matchesSearch = searchQuery.isEmpty()
+                    || item.title.toLowerCase(Locale.ROOT).contains(searchQuery)
+                    || item.location.toLowerCase(Locale.ROOT).contains(searchQuery)
+                    || item.details.toLowerCase(Locale.ROOT).contains(searchQuery)
+                    || item.category.toLowerCase(Locale.ROOT).contains(searchQuery);
+
+            if (matchesCategory && matchesSearch) {
+                try {
+                    renderDisasterCard(item);
+                    visibleCount++;
+                } catch (Exception e) {
+                    android.util.Log.w("DisasterActivity", "Card failed: " + item.title, e);
+                }
+            }
+        }
+
+        tvDisasterCount.setText("Guidelines & Shelters Directory (" + visibleCount + " entries)");
+
+        if (visibleCount == 0) {
+            tvNoDisasterResults.setVisibility(View.VISIBLE);
+        } else {
+            tvNoDisasterResults.setVisibility(View.GONE);
+        }
+    }
+
+    private void renderDisasterCard(DisasterItem item) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(Color.WHITE);
+        bg.setCornerRadius(dp(10));
+        bg.setStroke(dp(1), Color.parseColor("#E2E8F0"));
+        card.setBackground(bg);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, dp(14));
+        card.setLayoutParams(params);
+
+        // Header
+        LinearLayout top = new LinearLayout(this);
+        top.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView tag = new TextView(this);
+        tag.setText(item.category.toUpperCase(Locale.ROOT));
+        tag.setTextSize(11);
+        tag.setTypeface(null, Typeface.BOLD);
+        tag.setPadding(dp(8), dp(3), dp(8), dp(3));
+
+        GradientDrawable tagBg = new GradientDrawable();
+        tagBg.setCornerRadius(dp(4));
+
+        if (item.category.equalsIgnoreCase("Shelter")) {
+            tagBg.setColor(Color.parseColor("#DBEAFE"));
+            tag.setTextColor(Color.parseColor("#1E40AF"));
+        } else if (item.category.equalsIgnoreCase("Cyclone") || item.category.equalsIgnoreCase("Fire")) {
+            tagBg.setColor(Color.parseColor("#FEE2E2"));
+            tag.setTextColor(Color.parseColor("#991B1B"));
+        } else {
+            tagBg.setColor(Color.parseColor("#FEF3C7"));
+            tag.setTextColor(Color.parseColor("#92400E"));
+        }
+        tag.setBackground(tagBg);
+
+        TextView demoTag = new TextView(this);
+        demoTag.setText("DEMO CONTENT");
+        demoTag.setTextColor(Color.parseColor("#B45309"));
+        demoTag.setTextSize(10);
+        demoTag.setTypeface(null, Typeface.BOLD);
+        demoTag.setPadding(dp(10), dp(3), 0, 0);
+
+        top.addView(tag);
+        top.addView(demoTag);
+        card.addView(top);
+
+        // Title
+        TextView title = new TextView(this);
+        title.setText(item.title);
+        title.setTextSize(16);
+        title.setTextColor(Color.parseColor("#0F172A"));
+        title.setTypeface(null, Typeface.BOLD);
+        title.setPadding(0, dp(6), 0, dp(2));
+        card.addView(title);
+
+        // Location & Scope
+        TextView loc = new TextView(this);
+        loc.setText("Zone / Location: " + item.location);
+        loc.setTextSize(13);
+        loc.setTextColor(Color.parseColor("#475569"));
+        card.addView(loc);
+
+        TextView sub = new TextView(this);
+        sub.setText(item.subInfo);
+        sub.setTextSize(13);
+        sub.setTextColor(Color.parseColor("#0F766E"));
+        sub.setTypeface(null, Typeface.BOLD);
+        sub.setPadding(0, dp(2), 0, dp(4));
+        card.addView(sub);
+
+        TextView det = new TextView(this);
+        det.setText(item.details);
+        det.setTextSize(12);
+        det.setTextColor(Color.parseColor("#334155"));
+        det.setPadding(0, dp(2), 0, dp(8));
+        card.addView(det);
+
+        // Action Buttons Row
+        LinearLayout actions = new LinearLayout(this);
+        actions.setOrientation(LinearLayout.HORIZONTAL);
+
+        if (item.isShelter) {
+            Button btnMap = new Button(this);
+            btnMap.setText("Navigate to Shelter on Map");
+            btnMap.setTextSize(12);
+            btnMap.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#B91C1C")));
+            btnMap.setTextColor(Color.WHITE);
+            btnMap.setOnClickListener(v -> {
+                Intent mapIntent = new Intent(DisasterManagementActivity.this, CityMapActivity.class);
+                mapIntent.putExtra("DEST_LAT", item.latitude);
+                mapIntent.putExtra("DEST_LON", item.longitude);
+                mapIntent.putExtra("DEST_NAME", item.title);
+                startActivity(mapIntent);
+            });
+            LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+            btnMap.setLayoutParams(btnParams);
+            actions.addView(btnMap);
+        }
+
+        if (item.contactPhone != null && !item.contactPhone.isEmpty()) {
+            Button btnCall = new Button(this);
+            btnCall.setText("Call Helpline (" + item.contactPhone + ")");
+            btnCall.setTextSize(12);
+            btnCall.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#1E293B")));
+            btnCall.setTextColor(Color.WHITE);
+            btnCall.setOnClickListener(v -> {
+                String cleanNum = item.contactPhone.replaceAll("[^0-9]", "");
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + cleanNum));
+                startActivity(callIntent);
+            });
+            LinearLayout.LayoutParams callParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+            btnCall.setLayoutParams(callParams);
+            actions.addView(btnCall);
+        }
+
+        card.addView(actions);
+        layoutDisasterContainer.addView(card);
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    private static class DisasterItem {
+        String title, category, location, subInfo, details, contactPhone;
+        boolean isShelter;
+        double latitude, longitude;
+
+        DisasterItem(String title, String category, String location, String subInfo,
+                     String details, String contactPhone, boolean isShelter,
+                     double latitude, double longitude) {
+            this.title = title == null ? "" : title;
+            this.category = category == null ? "General" : category;
+            this.location = location == null ? "" : location;
+            this.subInfo = subInfo == null ? "" : subInfo;
+            this.details = details == null ? "" : details;
+            this.contactPhone = contactPhone;
+            this.isShelter = isShelter;
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+    }
+}
