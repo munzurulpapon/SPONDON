@@ -97,8 +97,4 @@ npm run test:admin  # admin / jobs / service-request rules
 - Restrict your Firebase API key to this app (package name + SHA-1) in Google Cloud Console.
 - If a key is ever exposed, rotate it immediately.
 
----
 
-## License
-
-Add a license of your choice here.
